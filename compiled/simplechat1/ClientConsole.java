@@ -102,14 +102,14 @@ public class ClientConsole implements ChatIF
    * This method handles console commands
    *
    */
-  private void handleCommand(String message){
+  private void handleCommand(String message) throws IOException {
 
     //if the user types quit it will close the client
-    if(Objects.equals(message, "#quit"))
+    if(message.equals("#quit"))
     {
       client.quit();
     }
-    else if(Objects.equals(message, "#logoff"))
+    else if(message.equals("#logoff"))
     {
       //need to disconnect from the server, but don't quit the client
       try
@@ -120,11 +120,39 @@ public class ClientConsole implements ChatIF
         System.out.println("Error: Could not disconnect from server. " + e);
       }
     }
-
+    else if(message.equals("#login"))
+    {
+      //need to reconnect to the server
+      if(!client.isConnected())
+      {
+        try
+        {
+          client.openConnection();
+        }
+        catch(IOException e) {
+          System.out.println("Error: Could not connect to server. " + e);
+        }
+      }
+      else
+      {
+        System.out.println("Error: You are already connected to the server.");
+      }
+    }
     //if message is #stop output a message that the server has stopped listening for new connections
-    if(Objects.equals(message, "#stop"))
+    else if(message.equals("#stop"))
     {
       System.out.println("Server has stopped listening for connections.");
+    }
+    else if(message.equals("#setport"))
+    {
+      if(client.isConnected()){
+        System.out.println("Error: You must log off before setting the port number.");
+      }
+      else{
+        System.out.println("Enter port number: ");
+
+      }
+
     }
 
   }
@@ -137,12 +165,9 @@ public class ClientConsole implements ChatIF
    */
   public void display(String message) 
   {
-
     System.out.println("> " + message);
-
   }
 
-  
   //Class methods ***************************************************
   
   /**

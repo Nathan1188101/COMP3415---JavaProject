@@ -106,7 +106,7 @@ public class ChatClient extends AbstractClient
     @Override
     protected void connectionClosed(){
       super.connectionClosed(); //keeping the default behavior from AbstractClient
-      System.exit(0); //terminates the client
+      //System.exit(0); //terminates the client
     }
 
 }
