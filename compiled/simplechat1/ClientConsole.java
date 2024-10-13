@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Dr Robert Lagani&egrave;re
  * @version July 2000
  */
-public class ClientConsole implements ChatIF 
+public class ClientConsole implements ChatIF
 {
   //Class variables *************************************************
   
@@ -81,14 +81,14 @@ public class ClientConsole implements ChatIF
         message = fromConsole.readLine();
 
         //if the input starts with a #, it is a command
-        if(message.startsWith("#"))
-        {
-          handleCommand(message);
-        }
-        else{
+//        if(message.startsWith("#"))
+//        {
+//          handleCommand(message);
+//        }
+        //else{
           //send the message to the client like normal
           client.handleMessageFromClientUI(message);
-        }
+        //}
       }
     } 
     catch (Exception ex) 
@@ -142,17 +142,6 @@ public class ClientConsole implements ChatIF
     else if(message.equals("#stop"))
     {
       System.out.println("Server has stopped listening for connections.");
-    }
-    else if(message.equals("#setport"))
-    {
-      if(client.isConnected()){
-        System.out.println("Error: You must log off before setting the port number.");
-      }
-      else{
-        System.out.println("Enter port number: ");
-
-      }
-
     }
 
   }

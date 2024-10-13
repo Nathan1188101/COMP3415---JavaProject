@@ -57,6 +57,36 @@ public class ChatClient extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
     clientUI.display(msg.toString());
+    if(msg.toString().startsWith("#"))
+    {
+      handleCommand(msg.toString());
+    }
+  }
+
+
+  public void handleCommand(String msg)
+  {
+    if(msg.equals("#quit"))
+    {
+      quit(); //quits chat client
+    }
+    else if(msg.equals("#logoff"))
+    {
+      try{
+        connectionClosed();
+      }
+      catch(Exception e)
+      {
+        System.out.println("Error: " + e);
+      }
+    }
+    else if(msg.equals("#setport"))
+    {
+    String[] messages = msg.split(" ");
+    this.setPort(Integer.parseInt(messages[1]));
+    System.out.println("Port Number Changed to: " + messages[1]);
+
+  }
   }
 
   /**
