@@ -326,6 +326,8 @@ public abstract class AbstractServer implements Runnable
           {
             ConnectionToClient c = new ConnectionToClient(
               this.clientThreadGroup, clientSocket, this);
+            //outputing message when a client connects to the server.
+            //System.out.println("A client has connected to the server!");
           }
         }
         catch (InterruptedIOException exception)

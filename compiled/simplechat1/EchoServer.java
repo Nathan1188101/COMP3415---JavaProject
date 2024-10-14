@@ -70,6 +70,29 @@ public class EchoServer extends AbstractServer
     }
 
   }
+
+  /**
+   * This method sends a message when a client disconnects from the server
+   *
+   * synchronized to avoid concurrency issues
+   * @param client the connection with the client.
+   */
+  @Override
+  protected synchronized void clientDisconnected(ConnectionToClient client){
+    System.out.println("A client has disconnected from the server: " + client);
+  }
+
+  /**
+   * This method sends a message to the server when a client connects.
+   *
+   * synchronized to avoid concurrency issues
+   * @param client the connection connected to the client.
+   */
+  @Override
+  protected synchronized void clientConnected(ConnectionToClient client)
+  {
+    System.out.println("A client has connected to the server: " + client);
+  }
     
   /**
    * This method overrides the one in the superclass.  Called
@@ -104,20 +127,12 @@ public class EchoServer extends AbstractServer
   {
     int port = 0; //Port to listen on
 
-    //may need this code for later (or something similar to it)
-    //Scanner scanner = new Scanner(System.in);
-    //int port = scanner.nextInt(); //Port to connect to
-
     try
     {
-      //may need this code for later (or something similar to it)
-      //port = Integer.parseInt(args[0]); //Get port from command line
-
       port = Integer.parseInt(args[0]);
     }
     catch(Throwable t)
     {
-      //port = scanner.nextInt(); //Port to connect to
       port = DEFAULT_PORT;// Set port to 5555
     }
 	
