@@ -56,11 +56,16 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-    clientUI.display(msg.toString());
+
+    //COME BACK TO THIS, PROBLEMS YOU'RE RUNNING INTO WITH SETTING PORT IS BECAUSE
+    //WE ARE READING THE MESSAGES WHEN THE COME BACK FROM THE SERVER NOT BEFORE WE SEND THEM.
+    //THAT's WHY IT ALWAYS GOES "CAN"T SEND MESSAGE TO SERVER" WHEN TRYING THE COMMAND
     if(msg.toString().startsWith("#"))
     {
       handleCommand(msg.toString());
     }
+    else
+      clientUI.display(msg.toString());
   }
 
 
@@ -73,20 +78,24 @@ public class ChatClient extends AbstractClient
     else if(msg.equals("#logoff"))
     {
       try{
-        connectionClosed();
+        //disconnect from server, but don't quit client
+        closeConnection();
       }
       catch(Exception e)
       {
         System.out.println("Error: " + e);
       }
     }
+    else if(msg.equals("#sethost")){
+
+    }
     else if(msg.equals("#setport"))
     {
-    String[] messages = msg.split(" ");
-    this.setPort(Integer.parseInt(messages[1]));
-    System.out.println("Port Number Changed to: " + messages[1]);
+        String[] messages = msg.split(" ");
+        this.setPort(Integer.parseInt(messages[1]));
+        System.out.println("Port Number Changed to: " + messages[1]);
 
-  }
+    }
   }
 
   /**
@@ -96,6 +105,9 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromClientUI(String message)
   {
+
+    //SHOULD BE HANDLING COMMANDS AND WHAT NOT HERE
+
     try
     {
       sendToServer(message);
