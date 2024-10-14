@@ -79,16 +79,8 @@ public class ClientConsole implements ChatIF
       {
         //get message from user input
         message = fromConsole.readLine();
-
-        //if the input starts with a #, it is a command
-//        if(message.startsWith("#"))
-//        {
-//          handleCommand(message);
-//        }
-        //else{
-          //send the message to the client like normal
-          client.handleMessageFromClientUI(message);
-        //}
+        //send the message to the client like normal
+        client.handleMessageFromClientUI(message);
       }
     } 
     catch (Exception ex) 
@@ -96,54 +88,6 @@ public class ClientConsole implements ChatIF
       System.out.println
         ("Unexpected error while reading from console!");
     }
-  }
-
-  /**
-   * This method handles console commands
-   *
-   */
-  private void handleCommand(String message) throws IOException {
-
-    //if the user types quit it will close the client
-    if(message.equals("#quit"))
-    {
-      client.quit();
-    }
-    else if(message.equals("#logoff"))
-    {
-      //need to disconnect from the server, but don't quit the client
-      try
-      {
-        client.closeConnection();
-      }
-      catch(IOException e) {
-        System.out.println("Error: Could not disconnect from server. " + e);
-      }
-    }
-    else if(message.equals("#login"))
-    {
-      //need to reconnect to the server
-      if(!client.isConnected())
-      {
-        try
-        {
-          client.openConnection();
-        }
-        catch(IOException e) {
-          System.out.println("Error: Could not connect to server. " + e);
-        }
-      }
-      else
-      {
-        System.out.println("Error: You are already connected to the server.");
-      }
-    }
-    //if message is #stop output a message that the server has stopped listening for new connections
-    else if(message.equals("#stop"))
-    {
-      System.out.println("Server has stopped listening for connections.");
-    }
-
   }
 
   /**

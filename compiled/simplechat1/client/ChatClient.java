@@ -56,45 +56,89 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromServer(Object msg) 
   {
-
-    //COME BACK TO THIS, PROBLEMS YOU'RE RUNNING INTO WITH SETTING PORT IS BECAUSE
-    //WE ARE READING THE MESSAGES WHEN THE COME BACK FROM THE SERVER NOT BEFORE WE SEND THEM.
-    //THAT's WHY IT ALWAYS GOES "CAN"T SEND MESSAGE TO SERVER" WHEN TRYING THE COMMAND
-    if(msg.toString().startsWith("#"))
-    {
-      handleCommand(msg.toString());
-    }
-    else
       clientUI.display(msg.toString());
   }
 
 
-  public void handleCommand(String msg)
-  {
-    if(msg.equals("#quit"))
-    {
-      quit(); //quits chat client
-    }
-    else if(msg.equals("#logoff"))
-    {
-      try{
-        //disconnect from server, but don't quit client
-        closeConnection();
-      }
-      catch(Exception e)
-      {
-        System.out.println("Error: " + e);
-      }
-    }
-    else if(msg.equals("#sethost")){
+  /**
+   * This method handles client commands
+   * @param msg
+   * @throws IOException
+   */
+  public void handleCommand(String msg) throws IOException {
 
-    }
-    else if(msg.equals("#setport"))
+    //had to do an if statement for setport to handle it correctly
+    if(msg.startsWith("#setport"))
     {
+      if(!isConnected()){
+        //splitting the message by spaces
         String[] messages = msg.split(" ");
-        this.setPort(Integer.parseInt(messages[1]));
-        System.out.println("Port Number Changed to: " + messages[1]);
 
+        //checking if the second part of the message is a valid number
+        if(messages.length > 1 && messages[1].matches("\\d+"))
+        {
+          int port = Integer.parseInt(messages[1]);
+          this.setPort(port);
+          //int ports = this.getPort();
+          System.out.println("Port number set to: " + port);
+          //System.out.println("Port number direct: " + ports);
+        }
+        else{
+          System.out.println("Error setting port");
+        }
+      }
+      else
+        System.out.println("Must logoff to set port");
+
+    }
+    else if(msg.startsWith("#sethost")){
+      if(!isConnected()) {//if logged out/ not connected
+        //split the message by spaces
+        String[] messages = msg.split(" ");
+
+        if (messages.length > 1 && messages[1].matches("[a-z, A-Z]+")) {
+          String hostname = messages[1]; //getting host name from second part of input
+          this.setHost(hostname); //setting host name to input
+          System.out.println("Host set to: " + hostname);
+        } else {
+          System.out.println("Error setting host.");
+        }
+      }
+      else
+        System.out.println("Must logoff to set host.");
+    }
+    else{
+      switch (msg) {
+        case "#quit":
+          quit(); //quits chat client
+          break;
+
+        case "#logoff":
+          try {
+            //disconnect from server, but don't quit client
+            closeConnection();
+          } catch (Exception e) {
+            System.out.println("Error: " + e);
+          }
+          break;
+        case "#login":
+          openConnection();
+          break;
+
+        case "#gethost":
+          String host = this.getHost();
+          System.out.println("Host: " + host);
+          break;
+
+        case "#getport":
+          int port = this.getPort();
+          System.out.println("Port: " + port);
+          break;
+
+        default:
+          System.out.println("Unknown Command: " + msg);
+          break;
+      }
     }
   }
 
@@ -103,18 +147,22 @@ public class ChatClient extends AbstractClient
    *
    * @param message The message from the UI.    
    */
-  public void handleMessageFromClientUI(String message)
-  {
+  public void handleMessageFromClientUI(String message) throws IOException {
 
-    //SHOULD BE HANDLING COMMANDS AND WHAT NOT HERE
+    //SHOULD BE HANDLING COMMANDS AND WHAT NOT HERE (NOT IN HANDLEFROMSERVER)
 
-    try
+    if(message.startsWith("#"))
     {
-      sendToServer(message);
+      handleCommand(message);
     }
-    catch(IOException e)
-    {
-      clientUI.display
+    else
+      try
+      {
+        sendToServer(message);
+      }
+      catch(IOException e)
+      {
+        clientUI.display
         ("Could not send message to server.  Terminating client.");
       quit();
     }
