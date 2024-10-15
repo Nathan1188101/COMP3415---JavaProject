@@ -123,6 +123,7 @@ public class ChatClient extends AbstractClient
           break;
         case "#login":
           openConnection();
+          System.out.println("Login Successful");
           break;
 
         case "#gethost":
@@ -148,8 +149,6 @@ public class ChatClient extends AbstractClient
    * @param message The message from the UI.    
    */
   public void handleMessageFromClientUI(String message) throws IOException {
-
-    //SHOULD BE HANDLING COMMANDS AND WHAT NOT HERE (NOT IN HANDLEFROMSERVER)
 
     if(message.startsWith("#"))
     {

@@ -113,6 +113,11 @@ public class EchoServer extends AbstractServer
     System.out.println
       ("Server has stopped listening for connections.");
   }
+
+  public void handleMessageServer(String message){
+    System.out.println(message); //display message on server console
+    sendToAllClients(message);//sending message to all clients
+  }
   
   //Class methods ***************************************************
   
