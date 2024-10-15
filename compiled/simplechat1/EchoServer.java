@@ -55,15 +55,6 @@ public class EchoServer extends AbstractServer
     System.out.println("Message received: " + msg + " from " + client);
     this.sendToAllClients(msg);
 
-    //if the message is #quit, close the server (not sure if this is working how I want it too)
-//    if(message.equals("#quit")) {
-//      try {
-//        close(); //close the server
-//      } catch (IOException e) {
-//        e.printStackTrace();
-//      }
-//    }
-
     //if the message is #stop, stop listening for new connections
     if(message.equals("#stop")) {
       stopListening();
@@ -74,11 +65,16 @@ public class EchoServer extends AbstractServer
   /**
    * This method sends a message when a client disconnects from the server
    *
+   * I was trying to use clientDisconnected, but it wasn't ever being called when a
+   * client was disconnecting. I realized eventually (I think) that the
+   * server was detecting disconnects through exceptions. So I ended up using
+   * clientException to handle it, and it has seemed to work out.
+   *
    * synchronized to avoid concurrency issues
    * @param client the connection with the client.
    */
   @Override
-  protected synchronized void clientDisconnected(ConnectionToClient client){
+  protected synchronized void clientException(ConnectionToClient client, Throwable exception){
     System.out.println("A client has disconnected from the server: " + client);
   }
 

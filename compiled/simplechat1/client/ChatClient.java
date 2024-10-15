@@ -117,10 +117,12 @@ public class ChatClient extends AbstractClient
           try {
             //disconnect from server, but don't quit client
             closeConnection();
+            System.out.println("You have logged off from the server.");
           } catch (Exception e) {
             System.out.println("Error: " + e);
           }
           break;
+
         case "#login":
           openConnection();
           System.out.println("Login Successful");
