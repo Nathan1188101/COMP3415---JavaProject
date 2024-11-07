@@ -46,11 +46,11 @@ public class ClientConsole implements ChatIF
    * @param host The host to connect to.
    * @param port The port to connect on.
    */
-  public ClientConsole(String host, int port) 
+  public ClientConsole(String host, int port, String loginId)
   {
     try 
     {
-      client = new ChatClient(host, port, this);
+      client = new ChatClient(host, port, this, loginId);
     } 
     catch(IOException exception) 
     {
@@ -110,14 +110,29 @@ public class ClientConsole implements ChatIF
    */
   public static void main(String[] args) throws IOException {
 
+    //this scanner is used for getting the userId and the port number a little further below
+    Scanner scanner = new Scanner(System.in); //main purpose of scanner is to parse primitive types and strings using regular expressions, but it can also be used to read input from the user in the console.
+
+    //get login id from the user on the command line
+    System.out.print("Enter login id: ");
+    String loginId = scanner.nextLine();
+    if (loginId.isEmpty()) {
+      System.out.println("Must provide loginId. Exiting... ");
+        System.exit(1);
+    }
+    else
+    {
+      System.out.println("Successfully logged in.");
+    }
+
+
+
     //outputting a message to the user to enter the port number to connect to, otherwise it's not obvious to the user what to do.
     System.out.println("Client started. Enter the port number to connect to (Default port number is 5555): ");
 
     String host = "";
     //int port = 0;  //The port number
 
-    //scanner for user input for port number.
-    Scanner scanner = new Scanner(System.in); //main purpose of scanner is to parse primitive types and strings using regular expressions, but it can also be used to read input from the user in the console.
     int port = scanner.nextInt(); //Port to connect to
 
     try
@@ -128,7 +143,7 @@ public class ClientConsole implements ChatIF
     {
       host = "localhost";
     }
-    ClientConsole chat= new ClientConsole(host, port);
+    ClientConsole chat= new ClientConsole(host, port, loginId);
     chat.accept();  //Wait for console data
   }
 }

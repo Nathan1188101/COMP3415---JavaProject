@@ -37,13 +37,22 @@ public class ChatClient extends AbstractClient
    * @param port The port number to connect on.
    * @param clientUI The interface type variable.
    */
+
+  //loginId instance variable held in chat client
+  private String loginId;
   
-  public ChatClient(String host, int port, ChatIF clientUI) 
+  public ChatClient(String host, int port, ChatIF clientUI, String loginId)
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
+    this.loginId = loginId;
     openConnection();
+  }
+
+  //getter in case we need to get the login id
+  public String getLoginId() {
+    return loginId;
   }
 
   
@@ -180,6 +189,19 @@ public class ChatClient extends AbstractClient
     }
     catch(IOException e) {}
     System.exit(0);
+  }
+
+  /**
+   * overriding the connectionEstablished class from the abstract client
+   */
+  @Override
+  protected void connectionEstablished(){
+    try {
+      sendToServer("#login " + loginId);
+    } catch (IOException e) {
+      System.out.println("Error: " + e);
+    }
+
   }
 
   /**
