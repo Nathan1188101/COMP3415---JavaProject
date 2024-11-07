@@ -55,7 +55,7 @@ public class EchoServer extends AbstractServer
     //System.out.println("Message received: " + msg + " from " + client);
     //this.sendToAllClients(msg);
 
-    //this is for the first message that the client sends - it must be #login
+    //this is for the first message that the client sends - it must be #login. If the first command is not login, close the connection
     // Check if the client is not logged in and the first message is not #login
     if ((flag == null || !flag) && !message.startsWith("#login")) {
       // If this is the first message and it isn't #login, send error and close connection
