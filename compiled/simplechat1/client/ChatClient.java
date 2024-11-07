@@ -132,9 +132,11 @@ public class ChatClient extends AbstractClient
           }
           break;
 
+          //you get unknown command if this isn't up
         case "#login":
-          openConnection();
-          System.out.println("Login Successful");
+          //openConnection();
+          //System.out.println("Login Successful");
+          sendToServer("#login " + loginId);//redirecting to the server to handle the login command
           break;
 
         case "#gethost":

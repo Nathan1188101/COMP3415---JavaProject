@@ -75,6 +75,7 @@ public class EchoServer extends AbstractServer
         this.sendToAllClients("User has already logged in");
       }
 
+      return; //returning to avoid the message being sent to all clients, since it's a login message
 
       }
 
