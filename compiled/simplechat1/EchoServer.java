@@ -47,13 +47,52 @@ public class EchoServer extends AbstractServer
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
    */
-  public void handleMessageFromClient
-    (Object msg, ConnectionToClient client)
+  public void handleMessageFromClient(Object msg, ConnectionToClient client)
   {
+    String newMsg;
+    Boolean flag = (Boolean) client.getInfo("flag");//getting the flag from the client
     String message = msg.toString();
 
-    System.out.println("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+    //System.out.println("Message received: " + msg + " from " + client);
+    //this.sendToAllClients(msg);
+
+
+    if(message.startsWith("#login")) {
+      //if user hasn't logged in yet i.e flag is false or null (null is for the first time the user logs in)
+      if(flag == null || !flag){
+        //we can take the message that was received, identifying it by the start of #login. strip that and take the id left behind
+        String loginId = message.substring(6).trim();//trimming the message to get the login id
+
+        //saving the user's login id so that the server can always identify the user
+        client.setInfo("loginId", loginId);//setting the login id to the client
+        client.setInfo("flag", true);//setting the flag to 1 to indicate that the user has logged in
+
+        System.out.println("Client logged in with: " + loginId);
+      }
+      else{
+        //if the user has already logged in, display this message
+        System.out.println("User has already logged in");
+        this.sendToAllClients("User has already logged in");
+      }
+
+
+      }
+
+    String loginId = (String) client.getInfo("loginId");//getting the login id from the client
+
+    if(loginId != null){
+      //new variable for adding the login id to the message
+      newMsg = loginId + ": " + msg;
+      System.out.println("Message received from " + loginId + ": " + msg);
+    }
+    else{
+      //if the login id is null, just display the message as is
+      newMsg = msg.toString();
+      System.out.println("Message received: " + msg + " from " + client);
+    }
+
+    //sending the message to all clients
+    this.sendToAllClients(newMsg);
 
     //if the message is #stop, stop listening for new connections
     if(message.equals("#stop")) {
